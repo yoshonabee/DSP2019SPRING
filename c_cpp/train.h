@@ -167,5 +167,5 @@ static void train_iteration(HMM *hmm, const char *train_x_path) {
 	}
 
 	update_hmm(hmm, new_initial, new_transition, new_observation, sample_num);
-	fclose(fp);
+	// fclose(fp);
 }
