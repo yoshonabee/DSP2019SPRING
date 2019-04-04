@@ -17,6 +17,6 @@ int main(int argc, char const *argv[]) {
 	HMM *hmm = malloc(max_count * sizeof(HMM));
 	load_models(modellist_path, hmm, max_count);
 
-	predict(hmm, modellist_path, test_x_path, result_save_path, max_count);
+	predict(hmm, test_x_path, result_save_path, max_count);
 
 }

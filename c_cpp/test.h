@@ -42,15 +42,13 @@ static void calc_delta(const HMM *hmm, State *state, const char *x) {
 	}
 }
 
-static void predict(const HMM *hmm, const char *modellist_path, const char *test_x_path, const char *result_save_path, const int max_count) {
+static void predict(const HMM *hmm, const char *test_x_path, const char *result_save_path, const int max_count) {
 	char **modellist = malloc(max_count * sizeof(char *));
 
-	FILE *mf = open_or_die(modellist_path, "r");
 	for (int i = 0; i < max_count; i++) {
-		modellist[i] = malloc(20 * sizeof(char));
-		fscanf(mf, "%s", modellist[i]);
+		modellist[i] = malloc(15 * sizeof(char));
+		sprintf(modellist[i], "model_0%d.txt", i + 1);
 	}
-	fclose(mf);
 
 	State state;
 	FILE *fp = open_or_die(test_x_path, "r");
@@ -70,7 +68,22 @@ static void predict(const HMM *hmm, const char *modellist_path, const char *test
 					best = i;
 				}
 		}
-		fprintf(result, "%s\n", modellist[best]);
+
+		int index = 0;
+		while (score < 1) {
+			score *= 10;
+			index--;
+		}
+		
+		for (int i = 0; i < strlen(x) - 1; i++) {
+			score /= COF;
+			while (score < 1) {
+				score *= 10;
+				index--;
+			}
+		}
+
+		fprintf(result, "%s %lfe%d\n", modellist[best], score, index);
 	}
 	fclose(fp);
 	fclose(result);

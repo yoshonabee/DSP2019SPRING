@@ -4,14 +4,9 @@
 #include <string.h>
 
 int main(int argc, char const *argv[])
-{	
-	if (argc < 3) {
-		printf("usage: ./acc [predict result] [ground truth]\n");
-		exit(1);
-	}
-
-	FILE *p = open_or_die(argv[1], "r");
-	FILE *g = open_or_die(argv[2], "r");
+{
+	FILE *p = open_or_die("result/result1.txt", "r");
+	FILE *g = open_or_die("data/test/testing_answer.txt", "r");
 
 	char buff1[20], buff2[20];
 	int sample_num = 0, correct = 0;
@@ -20,9 +15,15 @@ int main(int argc, char const *argv[])
 		sample_num++;
 		if (strcmp(buff1, buff2) == 0)
 			correct++;
+		fscanf(p, "%s", buff1);
 	}
 
-	printf("Accuracy: %lf\n", (double)correct / sample_num);
+	FILE *acc = open_or_die("result/acc.txt", "w");
+	printf("%lf\n", (double)correct / sample_num);
+	fprintf(acc, "%lf\n", (double)correct / sample_num);
+	fclose(p);
+	fclose(g);
+	fclose(acc);
 
 	return 0;
 }
